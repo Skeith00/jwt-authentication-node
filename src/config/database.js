@@ -1,7 +1,7 @@
 // https://node-postgres.com/
-const { Pool} = require('pg');
+import pg from 'pg';
 
-const pool = new Pool({
+export const pool = new pg.Pool({
   user: process.env['DATABASE_USER'],
   password: process.env['DATABASE_PASSWORD'],
   database: process.env['DATABASE_DATABASE'],
@@ -18,5 +18,3 @@ pool.on('error', (err, client) => {
   console.error('Unexpected error on idle client', err)
   process.exit(-1)
 })
-
-module.exports = { pool };

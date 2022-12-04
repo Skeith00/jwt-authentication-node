@@ -1,6 +1,7 @@
-const { pool } = require.main.require("./config/database");
+//const { pool } = require.main.require("./config/database");
+import { pool } from "../config/database.js";
 
-const createUser = (request, response) => {
+export const createUser =  function(request, response) {
     const { email, password, name, last_name } = request.body
 
     pool

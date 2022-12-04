@@ -1,9 +1,9 @@
 //https://www.section.io/engineering-education/how-to-build-authentication-api-with-jwt-token-in-nodejs/
-const express = require("express");
+import express from "express";
 const app = express();
-const usercontroller = require("./controller/usercontroller.js");
+import usercontroller from "./controllers/userController.js";
 
+app.use(express.json());
 app.use("/user", usercontroller);
-//app.use(express.json());
 
-module.exports = app;
+export default app;
