@@ -2,7 +2,7 @@ import * as userrepository from "../repositories/userRepository.js";
 import bcrypt from "bcryptjs";
 import {User}  from "../models/user.js";
 
-export function createUser(firstName, lastName, email, password) {
+export async function createUser(firstName, lastName, email, password) {
 
     //Encrypt user password
     var encryptedPassword = bcrypt.hashSync(password, 10);
@@ -15,5 +15,6 @@ export function createUser(firstName, lastName, email, password) {
       lastName
     );
 
-    userrepository.createUser(user);
+    const createdUser = await userrepository.createUser(user);
+    return createdUser.id;
 }
