@@ -1,10 +1,8 @@
 import { createServer } from "http";
 import app from "./app.js";
-const server = createServer(app);
 
-//const { API_PORT } = process.env;
-//const port = process.env.PORT || API_PORT;
-const port = 3000;
+const server = createServer(app);
+const port = process.env.API_PORT || 3000;
 
 // server listening 
 server.listen(port, () => {
