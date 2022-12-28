@@ -1,20 +1,7 @@
-import * as userrepository from "../repositories/userRepository.js";
-import bcrypt from "bcryptjs";
-import {User}  from "../models/user.js";
+import * as userRepository from "../repositories/userRepository.js";
 
-export async function createUser(firstName, lastName, email, password) {
-
-    //Encrypt user password
-    var encryptedPassword = bcrypt.hashSync(password, 10);
-
-    // Create user in our database
-    const user = new User(
-      email,
-      encryptedPassword,
-      firstName,
-      lastName
-    );
-
-    const createdUser = await userrepository.createUser(user);
-    return createdUser.id;
+export async function createUser(user) {
+    let createdUserId = await userRepository.createUser(user);
+    console.log(`User created with ID: ${createdUserId}`);
+    return createdUserId;
 }

@@ -1,17 +1,26 @@
 import { Router } from "express";
 const router = Router();
 import { createUser } from "../services/userService.js";
+import { User }  from "../models/user.js";
 
 // Register
 router.post("/register", async (req, res, next) => {
-  const { first_name, last_name, email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
+  
+    // Create user in our database
+    let user = new User(
+      email,
+      password,
+      firstName,
+      lastName
+    );
+
   try {
-    userId = await createUser(first_name, last_name, email, password);
+    let userId = await createUser(user);
     console.log(`User added with ID: ${userId}`);
     res.status(200).send('User created');
   } catch (e) {
-    console.error(e.stack);
-    res.status(500).send('Internal Error.');
+    next(e)
   }
 
 });
