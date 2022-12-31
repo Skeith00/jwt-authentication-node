@@ -12,3 +12,15 @@ export async function createUser(user){
         throw new dbError(`Error when trying to create user with email ${user.email}.`, err);
       }
 }
+
+export async function fetchUserByEmail(email){
+  try {
+      const results = await pool.query(
+          `SELECT * FROM user_account WHERE email = $1`, 
+          [email]
+      );    
+      return results.rows[0];
+    } catch(err) {
+      throw new dbError(`Error when trying to fetch user with email ${email}.`, err);
+    }
+}
