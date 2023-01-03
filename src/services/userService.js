@@ -1,17 +1,32 @@
 import * as userRepository from "../repositories/userRepository.js";
 import * as jwtService from "./jwtService.js";
 import { isValidPassword }  from "../utils/cryptoUtils.js";
+import { runTransaction }  from "../config/transaction.js";
 
 /**
  * Adds a new user in the DB, and generates a new token
  * 
  * @param {string} email 
  * @param {string} password 
- * @return {string} user token
+ * @return {Promise<string>} user token
  */
 export async function registerUser(user) {
-    await createUser(user);
-    return jwtService.createToken(user);
+    let token = await runTransaction(addUser, user)
+
+}
+
+/**
+ * Adds a new user in the DB, and generates a new token
+ * 
+ * @param {User} user object
+ * @param {PoolClient} postgres client
+ * @return {Promise<string>} user token
+ */
+async function addUser(user, client) {
+    let createdUser = await userRepository.createUser(user, client);
+    let token = jwtService.createToken(user);
+    console.log(`User created with ID: ${createdUser.id}`);
+    return token;
 }
 
 /**
@@ -19,7 +34,7 @@ export async function registerUser(user) {
  * 
  * @param {string} email 
  * @param {string} password 
- * @return {string} user token
+ * @return  {Promise<string>} user token
  */
 export async function validateUser(email, password) {
 
@@ -30,10 +45,4 @@ export async function validateUser(email, password) {
         // Create token
         return jwtService.createToken(user)
     }    
-}
-
-async function createUser(user) {
-    let createdUser = await userRepository.createUser(user);
-    console.log(`User created with ID: ${createdUser.id}`);
-    return createdUser;
 }
