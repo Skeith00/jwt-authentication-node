@@ -1,9 +1,9 @@
 import { pool } from "../config/database.js";
 import dbError  from "../models/errors/dbError.js";
 
-export async function createUser(user){
+export async function createUser(user, client) {
     try {
-        const results = await pool.query( 
+        const results = await client.query( 
             `INSERT INTO user_account(email, password, name, last_name) VALUES($1, $2, $3, $4) RETURNING id`, 
             [user.email, user.password, user.firstName, user.lastName]
         );    
@@ -13,7 +13,7 @@ export async function createUser(user){
       }
 }
 
-export async function fetchUserByEmail(email){
+export async function fetchUserByEmail(email) {
   try {
       const results = await pool.query(
           `SELECT * FROM user_account WHERE email = $1`, 
