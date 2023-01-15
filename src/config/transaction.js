@@ -5,7 +5,7 @@ export async function runTransaction(callback, ...args) {
 
     try {
         await client.query('BEGIN')
-        let response = await callback(args, client)
+        let response = await callback(...args, client)
         await client.query('COMMIT')
         return response;
     } catch (e) {

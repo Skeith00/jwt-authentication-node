@@ -12,7 +12,6 @@ import { runTransaction }  from "../config/transaction.js";
  */
 export async function registerUser(user) {
     let token = await runTransaction(addUser, user)
-
 }
 
 /**
@@ -23,6 +22,7 @@ export async function registerUser(user) {
  * @return {Promise<string>} user token
  */
 async function addUser(user, client) {
+    // TODO: Investigate decorators. client arsgument might be avoidable here
     let createdUser = await userRepository.createUser(user, client);
     let token = jwtService.createToken(user);
     console.log(`User created with ID: ${createdUser.id}`);
