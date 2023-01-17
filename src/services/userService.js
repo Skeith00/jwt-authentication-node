@@ -6,27 +6,16 @@ import { runTransaction }  from "../config/transaction.js";
 /**
  * Adds a new user in the DB, and generates a new token
  * 
- * @param {string} email 
- * @param {string} password 
+ * @param {User} user object
  * @return {Promise<string>} user token
  */
 export async function registerUser(user) {
-    let token = await runTransaction(addUser, user)
-}
-
-/**
- * Adds a new user in the DB, and generates a new token
- * 
- * @param {User} user object
- * @param {PoolClient} postgres client
- * @return {Promise<string>} user token
- */
-async function addUser(user, client) {
-    // TODO: Investigate decorators. client arsgument might be avoidable here
-    let createdUser = await userRepository.createUser(user, client);
-    let token = jwtService.createToken(user);
-    console.log(`User created with ID: ${createdUser.id}`);
-    return token;
+    return await runTransaction(async client =>  {
+        let createdUser = await userRepository.createUser(user, client);
+        let token = jwtService.createToken(user);
+        console.log(`User created with ID: ${createdUser.id}`);
+        return token;
+    })
 }
 
 /**
@@ -36,7 +25,7 @@ async function addUser(user, client) {
  * @param {string} password 
  * @return  {Promise<string>} user token
  */
-export async function validateUser(email, password) {
+export async function signInUser(email, password) {
 
     // Validate if user exist in our database
     const user = await userRepository.fetchUserByEmail(email.toLowerCase());

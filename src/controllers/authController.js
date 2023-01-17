@@ -12,6 +12,7 @@ router.post("/register", async (req, res, next) => {
     // Validate user input
     if (!(email && password && firstName && lastName)) {
       res.status(400).send("Some required fields are empty");
+      return;
     }
 
     // Create user object
@@ -38,15 +39,17 @@ router.post("/login", async (req, res, next) => {
   
       // Validate user input
       if (!(email && password)) {
-        res.status(400).send("All input is required");
+        res.status(400).send("All inputs are required");
+        return;
       }
 
       // Validate if user exist in our database
-      const jwt = await userService.validateUser(email, password);
+      const jwt = await userService.signInUser(email, password);
   
       if (jwt) {  
         // user
         res.status(200).json(jwt);
+        return;
       }
       res.status(400).send("Invalid Credentials.");
     } catch (e) {

@@ -2,8 +2,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import authController from "./controllers/authController.js";
+import healthController from "./controllers/healthController.js";
 
-import { unless } from './utils/middlewareExclusion.js';
+import { exclude } from './utils/middlewareExclusion.js';
 
 import { verifyToken } from "./middlewares/auth.js";
 import { errorLogger, errorResponder } from "./middlewares/errorHandler.js";
@@ -14,10 +15,11 @@ const app = express();
 app.use(express.json());
 
 // JWT verification middleware with route exclusions
-app.use(unless(['/auth/login', '/auth/register'], verifyToken));
+app.use(exclude(['/auth/login', '/auth/register'], verifyToken));
 
 // Controllers
 app.use("/auth", authController);
+app.use("/health", healthController);
 
 // Error handlers
 app.use(errorLogger)

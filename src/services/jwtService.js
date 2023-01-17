@@ -7,7 +7,7 @@ export function createToken(user) {
   // Create token
   return jwt.sign(
       { 
-        'name': user.firstName + ' ' + user.lastName, 
+        'name': user.name + ' ' + user.last_name, 
         'email': user.email
       },
       tokenKey,
