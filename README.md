@@ -1,7 +1,7 @@
 # jwt-authentication-node
 JWT authentication using node.js
 
-First of all, we need to run all docker containers(PostgreSQL) makeing use of the docker-compose file under docker folder:
+First of all, we need to run all docker containers(PostgreSQL) making use of the docker-compose file under docker folder:
 
 `docker-compose up`
 
